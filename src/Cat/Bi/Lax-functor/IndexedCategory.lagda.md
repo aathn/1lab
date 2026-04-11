@@ -329,7 +329,7 @@ functors both ways we do need to utilise $F$'s pseudofunctoriality.
 
 <details>
 <summary>
-Show that `fibre-equiv-to`{.Agda} and `fibre-equiv-from`{.Agda} form an
+Showing that `fibre-equiv-to`{.Agda} and `fibre-equiv-from`{.Agda} form an
 [[equivalence of categories]] is straightforward, and we elide the
 details.
 </summary>
@@ -403,18 +403,39 @@ enlightening.
 ```
 </details>
 
+## Total category of the Grothendieck construction
+
 <!--
 ```agda
   private
     ιᶠ'                  = Total.ιᶠ displayed
     ιᶠ-base-change-comp' = Total.ιᶠ-base-change-comp displayed fibration
+```
+-->
 
+As with any `displayed`{.Agda} category, we can pass to the total
+category, which bundles objects $x \in \ca{I}$ with objects $a \in F(x)$
+lying over $x$, and morphisms $f : x \to y$ with morphisms $\phi : a \to
+F(f)(b)$ lying over $f$.  Typically, we denote this total category
+directly as $\int F$.  Recalling that an indexed category is a
+bicategorical presheaf, the similarity to the notation for the
+[[category of elements]] of a presheaf is not a coincidence.
+
+```agda
   ∫ : Precategory _ _
   ∫ = Total.∫ displayed
+```
 
+We also get canonical inclusions from each fibre category $F(x)$ into
+the total category $\int F$.
+
+```agda
   ιᶠ : (x : I.Ob) → Functor (₀ x) ∫
   ιᶠ x = ιᶠ' x F∘ fibre-equiv-to
+```
 
+<!--
+```agda
   -- We specialize the construction from Cat.Displayed.Total to avoid unnecessary
   -- identity morphisms.
   ιᶠ-base-change : ∀ {a b} (f : I.Hom a b) → ιᶠ a F∘ ₁ f => ιᶠ b
@@ -436,11 +457,7 @@ enlightening.
     ∙ (
       Cr.cddr ∫ $ Total.∫Hom-path _ refl $ pulll (left-unit-υr-inv g _) ∙ cdr (idr _)
     )
-```
--->
 
-<!--
-```agda
 open Pseudofunctor
 
 module IndexedOplax
