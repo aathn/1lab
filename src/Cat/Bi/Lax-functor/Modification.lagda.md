@@ -34,8 +34,6 @@ natural transformations, so we won't dwell too much on the details.
 
 <!--
 ```agda
-unquoteDecl H-Level-Modification = declare-record-hlevel 2 H-Level-Modification (quote Modification)
-
 open Prebicategory C
 open Lax-transfor
 open Modification
@@ -47,8 +45,8 @@ private
 
 module _ {F G : Lax-functor B C} where
   private
-    module F  = Lax-functor F
-    module G  = Lax-functor G
+    module F = Lax-functor F
+    module G = Lax-functor G
 ```
 -->
 
@@ -74,65 +72,8 @@ transformations is given by the componentwise composition.
     (f .Γ b ∘ g .Γ b) ◀ F.₁ h ∘ ν→ x h       ∎
 ```
 
-Before proceeding to horizontal composition, we take a moment to note
-that modifications, consisting of families of 2-cells (which form a
-set), also themselves form a set.
-
-```agda
-  opaque
-    Mod-is-set : {α β : F =>ₗ G} → is-set (Modification α β)
-    Mod-is-set = hlevel 2
-```
-
-We can characterize equality of modifications by an extensionality
-principle: two modifications are equal if and only if they have
-identical components.
-
-```agda
-  Mod-pathp : {α α' β β' : F =>ₗ G}
-            → (p : α ≡ α') (q : β ≡ β')
-            → {a : Modification α β} {b : Modification α' β'}
-            → (∀ x → PathP _ (a .Γ x) (b .Γ x))
-            → PathP (λ i → Modification (p i) (q i)) a b
-  Mod-pathp p q path i .Γ x                            = path x i
-  Mod-pathp p q {a} {b} path i .is-natural {x} {y} {f} =
-    is-prop→pathp
-      (λ i → CH.Hom-set _ _
-        (ν→ (q i) f ∘ G.₁ f ▶ path x i) (path y i ◀ F.₁ f ∘ ν→ (p i) f))
-      (a .is-natural)
-      (b .is-natural) i
-
-  Mod-path : {α β : F =>ₗ G} {a b : Modification α β}
-           → ((x : _) → a .Γ x ≡ b .Γ x)
-           → a ≡ b
-  Mod-path = Mod-pathp refl refl
-```
-
 <!--
 ```agda
-  _Γᵈ_ : {α α' β β' : F =>ₗ G} {p : α ≡ α'} {q : β ≡ β'}
-       → {a : Modification α β} {b : Modification α' β'}
-       → PathP (λ i → Modification (p i) (q i)) a b
-       → ∀ x → PathP _ (a .Γ x) (b .Γ x)
-  p Γᵈ x = apd (λ i e → e .Γ x) p
-
-  _Γₚ_ : {α β : F =>ₗ G} {a b : Modification α β} → a ≡ b → ∀ x → a .Γ x ≡ b .Γ x
-  p Γₚ x = ap (λ e → e .Γ x) p
-
-  infixl 45 _Γₚ_
-
-  instance
-    Extensional-modification
-      : ∀ {ℓr} {α β : F =>ₗ G}
-      → ⦃ sa : {x : B.Ob} → Extensional (α .σ x ⇒ β .σ x) ℓr ⦄
-      → Extensional (Modification α β) (o ⊔ ℓr)
-    Extensional-modification ⦃ sa ⦄ .Pathᵉ f g = ∀ i → Pathᵉ sa (f .Γ i) (g .Γ i)
-    Extensional-modification ⦃ sa ⦄ .reflᵉ x i = reflᵉ sa (x .Γ i)
-    Extensional-modification ⦃ sa ⦄ .idsᵉ .to-path x = Mod-path λ i →
-      sa .idsᵉ .to-path (x i)
-    Extensional-modification ⦃ sa ⦄ .idsᵉ .to-path-over h =
-      is-prop→pathp (λ i → Π-is-hlevel 1 λ _ → Pathᵉ-is-hlevel 1 sa (hlevel 2)) _ _
-
 module _ {F G H : Lax-functor B C} {α α' : G =>ₗ H} {β β' : F =>ₗ G} where
   private
     module F  = Lax-functor F
@@ -145,15 +86,15 @@ module _ {F G H : Lax-functor B C} {α α' : G =>ₗ H} {β β' : F =>ₗ G} whe
 ```
 -->
 
-Finally, we proceed to describe the horizontal composition of
-modifications.  Here we must give a modification from the composite
-$\alpha \beta$ to the composite $\alpha' \beta'$, where $\alpha$,
-$\alpha'$, $\beta$, and $\beta'$ are lax transformations, given a
-modification from $\alpha$ to $\alpha'$ and one from $\beta$ to
-$\beta'$.  Recalling that the composition $\alpha \beta$ is given by the
-componentwise composition $(\alpha \beta)_a = \alpha_a \beta_a$, we can
-use the horizontal composition native to the target bicategory to
-construct our composite modification.
+We proceed to describe the horizontal composition of modifications.
+Here we must give a modification from the composite $\alpha \beta$ to
+the composite $\alpha' \beta'$, where $\alpha$, $\alpha'$, $\beta$, and
+$\beta'$ are lax transformations, given a modification from $\alpha$ to
+$\alpha'$ and one from $\beta$ to $\beta'$.  Recalling that the
+composition $\alpha \beta$ is given by the componentwise composition
+$(\alpha \beta)_a = \alpha_a \beta_a$, we can use the horizontal
+composition native to the target bicategory to construct our composite
+modification.
 
 ```agda
   _◆md_ : Modification α α' → Modification β β' → Modification (α ∘lx β) (α' ∘lx β')
@@ -190,4 +131,5 @@ reader.
     C.∘ α.ν→ x C.◀ β.σ a C.∘ C.α← _
       ∎
 ```
+
 </details>
