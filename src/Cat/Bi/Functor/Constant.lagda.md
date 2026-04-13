@@ -1,13 +1,13 @@
 <!--
 ```agda
-open import Cat.Bi.Lax-functor.Lax-transfor
-open import Cat.Bi.Lax-functor.Modification
-open import Cat.Bi.Instances.Lax-functor
+open import Cat.Bi.Functor.Transformation
+open import Cat.Bi.Functor.Modification
 open import Cat.Bi.Instances.Terminal
-open import Cat.Bi.Lax-functor.Base
+open import Cat.Bi.Instances.Functor
 open import Cat.Functor.Bifunctor
 open import Cat.Instances.Product
 open import Cat.Functor.Constant
+open import Cat.Bi.Functor.Base
 open import Cat.Bi.Duality
 open import Cat.Bi.Solver
 open import Cat.Bi.Base
@@ -19,7 +19,7 @@ import Cat.Reasoning as Cr
 -->
 
 ```agda
-module Cat.Bi.Lax-functor.Constant where
+module Cat.Bi.Functor.Constant where
 ```
 
 # Constant pseudofunctors {defines="constant-pseudofunctor"}
@@ -134,6 +134,7 @@ some slight bureaucracy to show that this is valid.
   unitor-inv .inverses .invl  = ext λ _ → Hom.idl _
   unitor-inv .inverses .invr  = ext λ _ → Hom.idr _
 ```
+
 </details>
 
 ```agda

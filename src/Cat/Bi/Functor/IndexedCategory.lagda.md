@@ -1,12 +1,12 @@
 <!--
 ```agda
 open import Cat.Bi.Instances.Discrete
-open import Cat.Bi.Lax-functor.Base
 open import Cat.Displayed.Cartesian
 open import Cat.Functor.Equivalence
 open import Cat.Functor.Naturality
 open import Cat.Instances.Discrete
 open import Cat.Functor.Coherence
+open import Cat.Bi.Functor.Base
 open import Cat.Displayed.Fibre
 open import Cat.Functor.Adjoint
 open import Cat.Displayed.Base
@@ -25,7 +25,7 @@ import Cat.Reasoning as Cr
 -->
 
 ```agda
-module Cat.Bi.Lax-functor.IndexedCategory where
+module Cat.Bi.Functor.IndexedCategory where
 ```
 
 # Indexed categories {defines="indexed-category"}
@@ -97,6 +97,7 @@ acts not only on objects and morphisms in $\ca{I}$, but also on *paths
 between the morphisms* in $\ca{I}$.  It turns out we can characterise
 this action as follows.
 </summary>
+
 ```agda
   abstract
     P₁-path
@@ -106,6 +107,7 @@ this action as follows.
         sym (ap Cr._≅_.to (P₁.ap-F₀-iso Disc-is-category (pg.hom→iso p)) ηₚ x)
       ∙ Regularity.reduce!
 ```
+
 </details>
 
 <!--
@@ -216,6 +218,7 @@ of $F$.  The lemma `P₁-hom-pathp`{.Agda} is derived from
 `P₁-path`{.Agda} and lets us build dependent paths of the correct type
 using $F$'s functorial action.
 </summary>
+
 ```agda
   displayed .Displayed.idr' {y = Fy} {f} Ff = P₁-hom-pathp (I.idr f) $
     ₂ (I.idr f) .η Fy ∘ γ→ _ .η Fy ∘ ₁ I.id .F₁ Ff ∘ υ→ .η _ ≡⟨ refl⟩∘⟨ refl⟩∘⟨ sym (υ→ .is-natural _ _ _) ⟩
@@ -238,6 +241,7 @@ using $F$'s functorial action.
   displayed .Displayed.hom[_] p Ff = ₂ p .η _ ∘ Ff
   displayed .Displayed.coh[_] p Ff = P₁-hom-pathp p refl
 ```
+
 </details>
 
 <!--
@@ -333,6 +337,7 @@ Showing that `fibre-equiv-to`{.Agda} and `fibre-equiv-from`{.Agda} form an
 [[equivalence of categories]] is straightforward, and we elide the
 details.
 </summary>
+
 ```agda
   fibre-equiv⊣ : ∀ {x} → fibre-equiv-to {x} ⊣ fibre-equiv-from
   fibre-equiv⊣ ._⊣_.unit .η _                = id
@@ -352,6 +357,7 @@ details.
   fibre-equiv .Equivalence.To-equiv .is-equivalence.counit-iso _ =
     Cr.id-invertible (Fibre displayed _)
 ```
+
 </details>
 
 <!--
@@ -388,6 +394,7 @@ What remains is verifying that both sides act identically on morphisms.
 The proof comes down to fiddly displayed reasoning and is not very
 enlightening.
 </summary>
+
 ```agda
     ni .make-natural-iso.eta∘inv x     = from-pathp[] $ idl' id'
     ni .make-natural-iso.inv∘eta x     = from-pathp[] $ idl' id'
@@ -401,6 +408,7 @@ enlightening.
           _ ∘ hom[ I.idl _ ] (id' ∘' ₁ f .F₁ g)                                   ≡⟨ refl⟩∘⟨ from-pathp[] (idl' _) ⟩
           υ→ .η _ ∘ ₁ f .F₁ g                                                     ∎
 ```
+
 </details>
 
 ## Total category of the Grothendieck construction

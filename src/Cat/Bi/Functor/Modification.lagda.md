@@ -1,6 +1,6 @@
 <!--
 ```agda
-open import Cat.Bi.Lax-functor.Lax-transfor
+open import Cat.Bi.Functor.Transformation
 open import Cat.Bi.Solver
 open import Cat.Bi.Base
 open import Cat.Prelude
@@ -10,7 +10,7 @@ import Cat.Bi.Reasoning as Br
 -->
 
 ```agda
-module Cat.Bi.Lax-functor.Modification
+module Cat.Bi.Functor.Modification
   {o h l o' h' l'} {B : Prebicategory o h l} {C : Prebicategory o' h' l'}
   where
 ```
@@ -23,7 +23,7 @@ $[\cC,\cD]$, [[lax functors]] between [[bicategories]] $\bicat{B}$ and
 $\bicat{C}$ similarly [form a bicategory] $[\bicat{C},\bicat{D}]$ where
 0-cells are lax functors and 1-cells are [[lax transformations]].
 
-[form a bicategory]: Cat.Bi.Instances.Lax-functor.html
+[form a bicategory]: Cat.Bi.Instances.Functor.html
 
 The 2-cells in this bicategory, that is, morphisms between lax
 transformations, are given by [[modifications]].  Here, we describe how

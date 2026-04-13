@@ -12,7 +12,7 @@ import Cat.Reasoning as Cr
 -->
 
 ```agda
-module Cat.Bi.Lax-functor.Lax-transfor
+module Cat.Bi.Functor.Transformation
   {o h l o' h' l'} {B : Prebicategory o h l} {C : Prebicategory o' h' l'}
   where
 ```
@@ -171,6 +171,7 @@ sequence.
 We elide the proof showing compatibility with the unitors, which is
 similar in spirit.
 </summary>
+
 ```agda
     lx .ν-unitor {a} =
       ν .η B.id ∘ H.υ→ ◀ _
@@ -186,13 +187,8 @@ similar in spirit.
       (α.σ a ⊗ β.σ a) ▶ F.υ→ ∘ ρ→ (α.σ a ⊗ β.σ a) ∘ λ← (α.σ a ⊗ β.σ a)
         ∎
 ```
-</details>
 
-<!--
-```agda
-  {-# DISPLAY ∘lx.lx f g = f ∘lx g #-}
-```
--->
+</details>
 
 The same construction lets us compose pseudonatural transformations,
 since if the naturators of $\alpha$ and $\beta$ are invertible, then the
@@ -208,3 +204,9 @@ composite constructed above is invertible, too.
     $ CH.invertible-∘ (C.◀.F-map-invertible (α .naturator-inv f))
     $ CH.is-invertible.op (CH.inverses→invertible (C.α≅ .inverses))
 ```
+
+<!--
+```agda
+{-# DISPLAY ∘lx.lx f g = f ∘lx g #-}
+```
+-->

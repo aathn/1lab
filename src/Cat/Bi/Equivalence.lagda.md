@@ -50,7 +50,9 @@ satisfy the triangle identities of an [[adjunction]].[^2]  Generalizing
 this, we get the definition of **equivalence** in a bicategory.
 
 [^1]: In a [[univalent category]], this intuition is also technically precise.
-[^2]: As [we have shown](Cat.Functor.Equivalence.Path.html), this notion also characterizes paths between univalent categories.
+[^2]:
+    As [we have shown](Cat.Functor.Equivalence.Path.html), this notion
+    also characterizes paths between univalent categories.
 
 ```agda
   record is-equivalence {A B} (f : A ↦ B) : Type (h ⊔ ℓ) where

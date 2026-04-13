@@ -14,7 +14,7 @@ import Cat.Reasoning as Cr
 -->
 
 ```agda
-module Cat.Bi.Lax-functor.Base where
+module Cat.Bi.Functor.Base where
 ```
 
 # Identity and composition for lax functors and pseudofunctors
@@ -263,6 +263,7 @@ but elide the other two equations which are similar in spirit.
 Here are the hexagon and right unit identities, not for the faint of
 heart.
 </summary>
+
 ```agda
     lf .hexagon f g h =
           F.₂ (G.₂ (B.α→ _)) D.∘ (F.₂ (G.γ→ _) D.∘ F.γ→ _)
@@ -295,13 +296,8 @@ heart.
       D.ρ← (F.₁ (G.₁ f))
         ∎
 ```
-</details>
 
-<!--
-```agda
-  {-# DISPLAY L∘.lf F G = F L∘ G #-}
-```
--->
+</details>
 
 Finally, pseudofunctors can be composed using the same construction,
 thanks to the fact that functors [preserve invertible morphisms] and
@@ -317,3 +313,9 @@ invertible morphisms compose.
   (F P∘ G) .compositor-inv _ = DH.invertible-∘
     (Pr.P₁.F-map-invertible F (Pr.compositor-inv G _)) (Pr.compositor-inv F _)
 ```
+
+<!--
+```agda
+{-# DISPLAY L∘.lf F G = F L∘ G #-}
+```
+-->
