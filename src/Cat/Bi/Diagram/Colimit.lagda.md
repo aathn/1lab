@@ -1,19 +1,18 @@
 <!--
 ```agda
-open import Cat.Bi.Lax-functor.IndexedCategory
-open import Cat.Bi.Lax-functor.Modification
-open import Cat.Bi.Instances.Lax-functor
-open import Cat.Bi.Lax-functor.Constant
+open import Cat.Bi.Functor.IndexedCategory
 open import Cat.Bi.Instances.Discrete
-open import Cat.Bi.Lax-functor.Base
+open import Cat.Bi.Instances.Functor
+open import Cat.Bi.Functor.Constant
 open import Cat.Functor.Equivalence
-open import Cat.Bi.Lax-functor.Hom
 open import Cat.Functor.Naturality
 open import Cat.Functor.Bifunctor
 open import Cat.Functor.Coherence
+open import Cat.Bi.Functor.Base
 open import Cat.Displayed.Total
 open import Cat.Functor.Adjoint
 open import Cat.Bi.Equivalence hiding (is-equivalence)
+open import Cat.Bi.Functor.Hom
 open import Cat.Functor.Base
 open import Cat.Bi.Duality hiding (_^op)
 open import Cat.Bi.Solver
@@ -185,6 +184,7 @@ We can show that `hom→cocone₀`{.Agda} extends to a pseudonatural
 transformation without too much effort.  We elide the details, which
 mostly boil down to automated bicategory reasoning.
 </summary>
+
 ```agda
     module _ {X Y : Ob} where
       hom→cocone-nat
@@ -210,7 +210,9 @@ mostly boil down to automated bicategory reasoning.
     hom→cocone .lax .ν-unitor         = ext λ _ _ → bicat! C
     hom→cocone .naturator-inv f       =
       Cr.iso→invertible Cat[ _ , _ ] (isoⁿ→iso hom→cocone-nat f)
+
 ```
+
 </details>
 
 In other words, to show that $L$ is the lax colimit of $F$, it suffices
@@ -281,6 +283,7 @@ Verifying that this data satisfies the required naturality and
 compatibility requirements is tedious but straightforward in principle,
 so we elide the details.
 </summary>
+
 ```agda
   univ-cocone .naturator .is-natural f g =
     J (λ g p → nat-unidl-to (F.ιᶠ-base-change g) ∘nt (_ ▸ F.₂ p)
@@ -301,6 +304,7 @@ so we elide the details.
       (F₀.cdr (cast[] (F.cancel-id' ∙[] F₀.idl _ ∙[] symP (idr' _))))
     ∙ G.introl (G.idl _)
 ```
+
 </details>
 
 To show that this cocone is universal, we must show that for any other
@@ -418,6 +422,7 @@ mostly consist of eliminating identity morphisms, but the terms involved
 get very big, and we have to construct layered natural transformations
 and modifications.
 </summary>
+
 ```agda
     cocone→mediator-unit : Id ≅ⁿ hom→cocone' F∘ cocone→mediator
     cocone→mediator-unit = to-natural-iso ni where
@@ -470,6 +475,7 @@ and modifications.
     cocone→mediator⊣ ._⊣_.zig     = ext λ _   → idl _
     cocone→mediator⊣ ._⊣_.zag {G} = ext λ _ _ → idr _ ∙ eliml (G .F-id)
 ```
+
 </details>
 
 Finally, we can state the result promised at the beginning of this

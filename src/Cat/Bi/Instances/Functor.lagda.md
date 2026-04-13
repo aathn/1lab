@@ -1,7 +1,7 @@
 <!--
 ```agda
-open import Cat.Bi.Lax-functor.Lax-transfor
-open import Cat.Bi.Lax-functor.Modification
+open import Cat.Bi.Functor.Transformation
+open import Cat.Bi.Functor.Modification
 open import Cat.Functor.Naturality
 open import Cat.Functor.Bifunctor
 open import Cat.Instances.Product
@@ -16,7 +16,7 @@ import Cat.Reasoning as Cr
 -->
 
 ```agda
-module Cat.Bi.Instances.Lax-functor where
+module Cat.Bi.Instances.Functor where
 ```
 
 # Lax functor bicategories
@@ -73,7 +73,7 @@ of the work required to define this category.
 Laxₗ[_,_] : Lax-functor B C → Lax-functor B C → Precategory _ _
 Laxₗ[_,_] F G .Pc.Ob                  = F =>ₗ G
 Laxₗ[_,_] F G .Pc.Hom                 = Modification
-Laxₗ[_,_] F G .Pc.Hom-set _ _         = Mod-is-set
+Laxₗ[_,_] F G .Pc.Hom-set _ _         = hlevel 2
 Laxₗ[_,_] F G .Pc.id                  = idmd
 Laxₗ[_,_] F G .Pc._∘_                 = _∘md_
 Laxₗ[_,_] {C = C} F G .Pc.idr _       = ext λ _ → Pb.Hom.idr C _
@@ -134,9 +134,9 @@ and acts on modifications by horizontal composition (or whiskering).
     → Bifunctor Laxₗ[ G , H ] Laxₗ[ F , G ] Laxₗ[ F , H ]
   compose = make-bifunctor mk where
     mk : Make-bifunctor
-    mk .F₀ α β     = α ∘lx β
-    mk .lmap f     = f ◆md idmd
-    mk .rmap g     = idmd ◆md g
+    mk .F₀ α β = α ∘lx β
+    mk .lmap f = f ◆md idmd
+    mk .rmap g = idmd ◆md g
 ```
 
 <details>
@@ -154,6 +154,7 @@ We elide the routine verification that this construction is functorial.
       ∙∙ C.⊗.lrmap _ _
       ∙∙ ap₂ C._∘_ (C.⊗.rmap-◆ _) (C.⊗.lmap-◆ _)
 ```
+
 </details>
 
 The left unitor in our bicategory should be a natural family of
@@ -181,6 +182,7 @@ $\bicat{C}$ at each component.
 The right unitor and associator are analogous, and we fold them into
 this `<details>`{.html}-block.
 </summary>
+
 ```agda
   unitor-r : ∀ {F G} → Id ≅ⁿ Bifunctor.Left (compose {G = F} {G}) idlx
   unitor-r = to-natural-iso ni where
@@ -205,6 +207,7 @@ this `<details>`{.html}-block.
     ni .make-natural-iso.inv∘eta α         = ext λ _ → C.α≅ .invr
     ni .make-natural-iso.natural _ _ _     = ext λ _ → bicat! C
 ```
+
 </details>
 
 Slotting these constructions into our bicategory, all that remains is

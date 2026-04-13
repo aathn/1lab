@@ -14,7 +14,7 @@ import Cat.Reasoning as Cr
 -->
 
 ```agda
-module Cat.Bi.Lax-functor.Hom {o h ℓ} (C : Prebicategory o h ℓ) where
+module Cat.Bi.Functor.Hom {o h ℓ} (C : Prebicategory o h ℓ) where
 ```
 
 # The bicategorical Hom functor {defines="bicategorical-hom-functor"}

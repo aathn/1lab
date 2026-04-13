@@ -1,9 +1,9 @@
 <!--
 ```agda
 open import Cat.Functor.Bifunctor.Duality
-open import Cat.Bi.Lax-functor.Base
 open import Cat.Functor.Naturality
 open import Cat.Functor.Bifunctor
+open import Cat.Bi.Functor.Base
 open import Cat.Bi.Base
 open import Cat.Prelude renaming (_^op to _^opᶜ)
 
@@ -57,7 +57,6 @@ the **opposite bicategory** $\bicat{C}\op$.
 
 ```agda
   infixl 60 _^op
-  {-# TERMINATING #-}
   _^op : Prebicategory o h ℓ
   _^op .Pb.Ob      = Ob
   _^op .Pb.Hom x y = Hom y x
@@ -103,18 +102,21 @@ associator of $\bicat{C}$.
     ni .make-natural-iso.eta∘inv _     = C.α≅ .invr
     ni .make-natural-iso.inv∘eta _     = C.α≅ .invl
 ```
+
 <details>
 <summary>
 To verify the naturality, we must shuffle some whiskerings around to
 make their order match what the naturality square of of the associator
 expects.
 </summary>
+
 ```agda
     ni .make-natural-iso.natural _ _ _ =
          CH.car (CH.cdr (ap (C._◀ _) (compose.rlmap _ _)) ∙ compose.rlmap _ _)
       ∙∙ sym (α←nat _ _ _)
       ∙∙ CH.cdr (CH.cdr (ap (_ C.▶_) (compose.lrmap _ _)) ∙ compose.lrmap _ _)
 ```
+
 </details>
 
 The triangle and pentagon identities are obtained from those in
@@ -187,12 +189,14 @@ opposite direction, which we achieve by taking their inverses.
 To verify the naturality of the associator, we must again shuffle some
 whiskerings.
 </summary>
+
 ```agda
     ni .make-natural-iso.natural _ _ _ =
          CH.cdr (CH.car (ap (_ C.▶_) (compose.rlmap _ _)) ∙ compose.rlmap _ _)
       ∙∙ α←nat _ _ _
       ∙∙ CH.car (CH.car (ap (C._◀ _) (compose.lrmap _ _)) ∙ compose.lrmap _ _)
 ```
+
 </details>
 
 The triangle and pentagon identities are given by inverting both sides
@@ -286,6 +290,7 @@ unitor in the conjugate construction.
 For the hexagon and unit identities, we invert the equations of $F$.
 The details are hidden in the block below.
 </summary>
+
 ```agda
     co .lax .hexagon f g h = inverse-unique refl refl
       (F.P₁.F-map-iso B.α≅ ∘Iso F.γ≅ ∘Iso C.◀.F-map-iso F.γ≅)
@@ -304,6 +309,7 @@ The details are hidden in the block below.
     co .compositor-inv fg .inverses .invl = F.compositor-inv fg .inverses .invl
     co .compositor-inv fg .inverses .invr = F.compositor-inv fg .inverses .invr
 ```
+
 </details>
 
 ## Oplax functors and transformations {defines="oplax-functor oplax-transformation"}
