@@ -45,11 +45,11 @@ module _
 
   open Prebicategory C
   open Pseudofunctor
-  open Pseudonatural
-  open Lax-transfor
   open Modification
   open Cr.Inverses
   open Cr._≅_
+  open _=>ₗ_
+  open _=>ₚ_
   open _=>_
 ```
 -->
@@ -241,11 +241,11 @@ module IndexedCategoryLaxColim
   (F : Pseudofunctor (Locally-discrete (I ^op)) (Cat (o ⊔ o') (h ⊔ h')))
   where
   open Pseudofunctor
-  open Lax-transfor
   open Modification
   open Cr.Inverses
   open Functor
   open Cr._≅_
+  open _=>ₗ_
   open _=>_
 
   private
@@ -339,7 +339,7 @@ with some $a \in F(i)$, we can use $\alpha_i$ to map $a$ into $X$,
 giving us the object mapping we need.
 
 ```agda
-      module α = Lax-transfor α
+      module α = _=>ₗ_ α
       funct : Functor F.∫ X
       funct .F₀ (x , Fx) = α.σ x .F₀ Fx
 ```
