@@ -34,8 +34,8 @@ module _ {B : Precategory o h} (E : Displayed B o' h') where
 -->
 
 We say a displayed category $\cE$ over $\cB$ is **thinly displayed** if
-the type of morphisms lying over any $f : A \to B$ in $\cB$ is a [[mere
-proposition]].
+the type of morphisms lying over any $f : A \to B$ in $\cB$ is a mere
+[[proposition]].
 
 ```agda
   is-thinly-displayed : Type (o ⊔ h ⊔ o' ⊔ h')
@@ -81,7 +81,7 @@ category of sets.  Equivalently, these are categories equipped with a
 faithful functor into $\Sets$, known in the literature as concrete
 categories.  These encompass most categories of standard mathematical
 structures, like the [[category of monoids]], the [[category of
-groups]], the [[category of posets]], and a plethora of other examples.
+groups]], the category of [[posets]], and a plethora of other examples.
 When working with specific examples of concrete categories it is often
 useful to take the displayed point of view, as it lets one directly
 define the class of relevant structures on a given set.
