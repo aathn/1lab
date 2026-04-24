@@ -149,6 +149,14 @@ morphism:
       → ∀ {o2} → (∀ j → o2 C.∘ ψ j ≡ eta j)
       → o1 ≡ o2
     unique₂ eta p q r = unique eta p _ q ∙ sym (unique eta p _ r)
+
+  record Make-colimit (Diagram : Functor J C) : Type (o₁ ⊔ h₁ ⊔ o₂ ⊔ h₂) where
+    no-eta-equality
+    field
+      coapex : C.Ob
+      has-colimit : make-is-colimit Diagram coapex
+
+    open make-is-colimit has-colimit public
 ```
 -->
 
@@ -276,6 +284,18 @@ function which **un**makes a colimit.
   to-colimit c .Lan.Ext = _
   to-colimit c .Lan.eta = _
   to-colimit c .Lan.has-lan = c
+
+  to-make-colimit
+    : {D : Functor J C} {coapex : C.Ob} → make-is-colimit D coapex → Make-colimit D
+  to-make-colimit mc .Make-colimit.coapex      = _
+  to-make-colimit mc .Make-colimit.has-colimit = mc
+
+  Colimit→Make-colimit : {D : Functor J C} → Colimit D → Make-colimit D
+  Colimit→Make-colimit colim = to-make-colimit $ unmake-colimit $ Lan.has-lan colim
+
+  Make-colimit→Colimit : {D : Functor J C} → Make-colimit D → Colimit D
+  Make-colimit→Colimit colim =
+    to-colimit $ to-is-colimit $ Make-colimit.has-colimit colim
 ```
 -->
 
@@ -557,6 +577,13 @@ is-cocomplete : ∀ {oc ℓc} o ℓ → Precategory oc ℓc → Type _
 is-cocomplete oj ℓj C = ∀ {J : Precategory oj ℓj} (F : Functor J C) → Colimit F
 ```
 
+<!--
+```agda
+is-cocomplete' : ∀ {oc ℓc} o ℓ → Precategory oc ℓc → Type _
+is-cocomplete' oj ℓj C = {J : Precategory oj ℓj} (F : Functor J C) → Make-colimit F
+```
+-->
+
 While this condition might sound very strong, and thus that it would be hard to come
 by, it turns out we can get away with only two fundamental types of colimits:
 [[coproducts]] and [[coequalisers]]. In order to construct the colimit for a diagram
@@ -580,9 +607,9 @@ module _ {o ℓ} {C : Precategory o ℓ} where
     → has-coproducts-indexed-by C ⌞ J ⌟
     → has-coproducts-indexed-by C (Arrow J)
     → has-coequalisers C
-    → (F : Functor J C) → Colimit F
+    → (F : Functor J C) → Make-colimit F
   colimit-as-coequaliser-of-coproduct {oj} {ℓj} {J} has-Ob-cop has-Arrow-cop has-coeq F =
-    to-colimit (to-is-colimit colim) where
+    to-make-colimit colim where
 ```
 
 <!--
@@ -677,7 +704,7 @@ all colimits.
     : ∀ {oj ℓj}
     → has-indexed-coproducts C (oj ⊔ ℓj)
     → has-coequalisers C
-    → is-cocomplete oj ℓj C
+    → is-cocomplete' oj ℓj C
   coproducts+coequalisers→cocomplete {oj} {ℓj} has-cop has-coeq =
     colimit-as-coequaliser-of-coproduct
       (λ _ → Lift-Indexed-coproduct C ℓj (has-cop _))
