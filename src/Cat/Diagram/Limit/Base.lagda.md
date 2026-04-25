@@ -268,6 +268,14 @@ the apex by a single, _unique_ universal morphism:
       → {o2 : C.Hom x apex} → (∀ j → ψ j C.∘ o2 ≡ eps j)
       → o1 ≡ o2
     unique₂ {x = x} eps p q r = unique eps p _ q ∙ sym (unique eps p _ r)
+
+  record Make-limit (Diagram : Functor J C) : Type (o₁ ⊔ h₁ ⊔ o₂ ⊔ h₂) where
+    no-eta-equality
+    field
+      apex : C.Ob
+      has-limit : make-is-limit Diagram apex
+
+    open make-is-limit has-limit public
 ```
 -->
 
@@ -390,6 +398,17 @@ limit:
   to-limit l .Ran.Ext = _
   to-limit l .Ran.eps = _
   to-limit l .Ran.has-ran = l
+
+  to-make-limit
+    : {D : Functor J C} {apex : C.Ob} → make-is-limit D apex → Make-limit D
+  to-make-limit ml .Make-limit.apex      = _
+  to-make-limit ml .Make-limit.has-limit = ml
+
+  Limit→Make-limit : {D : Functor J C} → Limit D → Make-limit D
+  Limit→Make-limit lim = to-make-limit $ unmake-limit $ Ran.has-ran lim
+
+  Make-limit→Limit : {D : Functor J C} → Make-limit D → Limit D
+  Make-limit→Limit lim = to-limit $ to-is-limit $ Make-limit.has-limit lim
 ```
 -->
 
@@ -677,6 +696,9 @@ is-complete oj ℓj C = ∀ {J : Precategory oj ℓj} (F : Functor J C) → Limi
 
 <!--
 ```agda
+is-complete' : ∀ {oc ℓc} o ℓ → Precategory oc ℓc → Type _
+is-complete' oj ℓj C = {J : Precategory oj ℓj} (F : Functor J C) → Make-limit F
+
 is-complete-lower
   : ∀ {o ℓ} {C : Precategory o ℓ} o₁ ℓ₁ o₂ ℓ₂
   → is-complete (o₁ ⊔ o₂) (ℓ₁ ⊔ ℓ₂) C
@@ -718,9 +740,9 @@ module _ {o ℓ} {C : Precategory o ℓ} where
     → has-products-indexed-by C ⌞ J ⌟
     → has-products-indexed-by C (Arrow J)
     → has-equalisers C
-    → (F : Functor J C) → Limit F
+    → (F : Functor J C) → Make-limit F
   limit-as-equaliser-of-product {oj} {ℓj} {J} has-Ob-prod has-Arrow-prod has-eq F =
-    to-limit (to-is-limit lim) where
+    to-make-limit lim where
 ```
 
 <!--
@@ -814,7 +836,7 @@ all limits.
     : ∀ {oj ℓj}
     → has-indexed-products C (oj ⊔ ℓj)
     → has-equalisers C
-    → is-complete oj ℓj C
+    → is-complete' oj ℓj C
   products+equalisers→complete {oj} {ℓj} has-prod has-eq =
     limit-as-equaliser-of-product
       (λ _ → Lift-Indexed-product C ℓj (has-prod _))
