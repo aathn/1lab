@@ -10,6 +10,7 @@ open import Cat.Diagram.Initial
 open import Cat.Diagram.Pushout
 open import Cat.Prelude
 
+open import Data.Set.Coequaliser
 open import Data.Sum
 ```
 -->
@@ -124,10 +125,11 @@ definition.
     : ∀ {A : Set (ι ⊔ κ ⊔ o)} (eta : ∀ j → F ʻ j → ∣ A ∣)
     → (∀ {x y} (f : D.Hom x y) → ∀ Fx → eta y (F.F₁ f Fx) ≡ eta x Fx)
     → sum / rel → ∣ A ∣
-  univ {A} eta p =
-    Coeq-rec
-      (λ { (x , p) → eta x p })
-      (λ { ((X , x) , (Y , y) , f , q) → sym (p f x) ∙ ap (eta _) q})
+  univ {A} eta p = Coeq-rec (uncurry eta) resp where
+    open Quot
+    abstract
+      resp : ∀ (x : tot rel) → uncurry eta (/-left x) ≡ uncurry eta (/-right x)
+      resp ((X , x) , (Y , y) , f , q) = sym (p f x) ∙ ap (eta _) q
 
   colim : make-is-colimit F (el! (sum / rel))
   colim .ψ x p = inc (x , p)

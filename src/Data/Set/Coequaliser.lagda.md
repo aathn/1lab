@@ -259,7 +259,7 @@ projections, we obtain a space where any related objects are identified:
 the **quotient** $A/R$.
 
 ```agda
-private
+module Quot where
   tot : ∀ {ℓ} → (A → A → Type ℓ) → Type (level-of A ⊔ ℓ)
   tot {A = A} R = Σ[ x ∈ A ] Σ[ y ∈ A ] R x y
 
@@ -268,7 +268,10 @@ private
 
   /-right : ∀ {ℓ} {R : A → A → Type ℓ} → tot R → A
   /-right (_ , x , _) = x
+
+open Quot
 ```
+
 <!--
 ```agda
 private variable

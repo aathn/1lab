@@ -305,8 +305,9 @@ other data we have been given:
     open _=>_
 
     lim : is-limit Diagram apex (to-cone mklim)
-    lim .σ {M = M} α .η _ =
-      universal (α .η) (λ f → sym (α .is-natural _ _ f) ∙ C.elimr (M .F-id))
+    lim .σ {M = M} α .η _ = universal (α .η) comm where abstract
+      comm : ∀ {x y} (f : J.Hom x y) → Diagram .F₁ f C.∘ α .η x ≡ α .η y
+      comm f = sym (α .is-natural _ _ f) ∙ C.elimr (M .F-id)
     lim .σ {M = M} α .is-natural _ _ _ =
       lim .σ α .η _ C.∘ M .F₁ tt ≡⟨ C.elimr (M .F-id) ⟩
       lim .σ α .η _              ≡˘⟨ C.idl _ ⟩

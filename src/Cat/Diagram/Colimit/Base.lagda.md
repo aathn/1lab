@@ -189,8 +189,9 @@ the rest of the data.
     open Functor
 
     colim : is-colimit Diagram coapex (to-cocone mkcolim)
-    colim .σ {M = M} α .η _ =
-      universal (α .η) (λ f → α .is-natural _ _ f ∙ C.eliml (M .F-id))
+    colim .σ {M = M} α .η _ = universal (α .η) comm where abstract
+      comm : ∀ {x y} (f : J.Hom x y) → α .η y C.∘ Diagram .F₁ f ≡ α .η x
+      comm f = α .is-natural _ _ f ∙ C.eliml (M .F-id)
     colim .σ {M = M} α .is-natural _ _ _ = C.idr _ ∙ C.introl (M .F-id)
     colim .σ-comm {α = α} = ext λ j → factors (α .η) _
     colim .σ-uniq {α = α} {σ' = σ'} p = ext λ _ →
