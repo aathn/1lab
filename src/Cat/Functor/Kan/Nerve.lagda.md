@@ -183,7 +183,7 @@ computations using naturality. It's not very enlightening.
 module _
   {o κ κ'} {C : Precategory κ κ} {D : Precategory o κ'}
   (F : Functor C D)
-  (cocompl : is-cocomplete κ κ D)
+  (cocompl : is-cocomplete' κ κ D)
   where
 ```
 -->
@@ -209,7 +209,7 @@ left adjoint we were after, the "realisation" functor.
 module _
   {o κ} {C : Precategory κ κ} {D : Precategory o κ}
   (F : Functor C D)
-  (cocompl : is-cocomplete κ κ D)
+  (cocompl : is-cocomplete' κ κ D)
   where
 
   private

@@ -93,8 +93,8 @@ set-coequalisers already includes a truncation.
 [coequaliser]: Data.Set.Coequaliser.html
 
 ```agda
-Sets-is-cocomplete : ∀ {ι κ o} → is-cocomplete ι κ (Sets (ι ⊔ κ ⊔ o))
-Sets-is-cocomplete {ι} {κ} {o} {J = D} F = to-colimit (to-is-colimit colim) where
+Sets-is-cocomplete' : ∀ {ι κ o} → is-cocomplete' ι κ (Sets (ι ⊔ κ ⊔ o))
+Sets-is-cocomplete' {ι} {κ} {o} {J = D} F = to-make-colimit colim where
   module D = Precategory D
   module F = Functor F
   open _=>_
@@ -140,6 +140,13 @@ definition.
       (λ x → happly (q (x .fst)) (x .snd))
       x
 ```
+
+<!--
+```agda
+Sets-is-cocomplete : ∀ {ι κ o} → is-cocomplete ι κ (Sets (ι ⊔ κ ⊔ o))
+Sets-is-cocomplete {o = o} = Make-colimit→Colimit ⊙ Sets-is-cocomplete' {o = o}
+```
+-->
 
 ## Finite set-colimits
 

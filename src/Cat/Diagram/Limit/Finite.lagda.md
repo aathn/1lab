@@ -97,7 +97,7 @@ products).
     : is-category C
     → Finitely-complete → is-finitely-complete
   Finitely-complete→is-finitely-complete cat Flim finite =
-    limit-as-equaliser-of-product
+    Make-limit→Limit ⊙ limit-as-equaliser-of-product
       (Cartesian→finite-products (Flim .terminal) (Flim .products) cat (finite .has-finite-Ob))
       (Cartesian→finite-products (Flim .terminal) (Flim .products) cat (finite .has-finite-Arrow))
       (Flim .equalisers)

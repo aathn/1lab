@@ -26,8 +26,8 @@ indexing category $\cD$ and a diagram $F : \cD \to \Sets$; Let's
 build a limit for it!
 
 ```agda
-Sets-is-complete : ∀ {ι κ o} → is-complete ι κ (Sets (ι ⊔ κ ⊔ o))
-Sets-is-complete {J = D} F = to-limit (to-is-limit lim) module Sets-is-complete where
+Sets-is-complete' : ∀ {ι κ o} → is-complete' ι κ (Sets (ι ⊔ κ ⊔ o))
+Sets-is-complete' {J = D} F = to-make-limit lim module Sets-is-complete where
   module D = Precategory D
   module F = Functor F
   open make-is-limit
@@ -75,6 +75,9 @@ out by $\lim F$ since $K$ is a cone, hence $F(f) \circ \psi(x) =
 
 <!--
 ```agda
+Sets-is-complete : ∀ {ι κ o} → is-complete ι κ (Sets (ι ⊔ κ ⊔ o))
+Sets-is-complete {o = o} = Make-limit→Limit ⊙ Sets-is-complete' {o = o}
+
 module _ {ℓ} where
   open Precategory (Sets ℓ)
 

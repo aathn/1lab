@@ -15,7 +15,7 @@ open import Cat.Prelude
 module
   Cat.Functor.Hom.Cocompletion
     {κ o} (C : Precategory κ κ) (D : Precategory o κ)
-    (colim : is-cocomplete κ κ D)
+    (colim : is-cocomplete' κ κ D)
     where
 ```
 

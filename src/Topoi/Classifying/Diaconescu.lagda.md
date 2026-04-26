@@ -127,8 +127,8 @@ module _ {o κ} {C : Precategory o κ} (𝓣 : Topos κ C) where
   private
     module C = Cat.Reasoning C
     abstract
-      colim : is-cocomplete κ κ C
-      colim = Topos-is-cocomplete 𝓣
+      colim : is-cocomplete' κ κ C
+      colim = Colimit→Make-colimit ⊙ Topos-is-cocomplete 𝓣
 ```
 -->
 

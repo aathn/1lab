@@ -30,7 +30,7 @@ module _
   {o₁ ℓ₁} {C : Precategory o₁ ℓ₁}
   {o₂ ℓ₂} {D : Precategory o₂ ℓ₂}
   {o₃ ℓ₃} {E : Precategory o₃ ℓ₃}
-  (has-D-lims : (F : Functor D C) → Limit F)
+  (has-D-lims : (F : Functor D C) → Make-limit F)
   (F : Functor D Cat[ E , C ])
   where
 ```
@@ -59,7 +59,7 @@ limits.
 
 ```agda
     module F' = Bifunctor F
-    module D-lim x = Limit (has-D-lims (F'.Left x))
+    module D-lim x = Make-limit (has-D-lims (F'.Left x))
 ```
 
 Let us call the limit of $F(-, x)$ --- taken in $\cC$ ---
@@ -81,8 +81,8 @@ homomorphism $K \to \lim F(-, x)$ will be called `!-for`{.Agda}.
       ∙ C.pullr (D-lim.factors _ _ _)
       ∙ C.pulll (sym (F'.rmap-∘ _ _))
 
-  functor-limit : Limit F
-  functor-limit = to-limit $ to-is-limit ml where
+  functor-limit : Make-limit F
+  functor-limit = to-make-limit ml where
     open make-is-limit
 
     ml : make-is-limit F functor-apex
@@ -106,14 +106,20 @@ As a corollary, if $\cD$ is an $(o,\ell)$-complete category, then so
 is $[\cC,\cD]$.
 
 ```agda
-Functor-cat-is-complete :
+Functor-cat-is-complete' :
   ∀ {o ℓ} {o₁ ℓ₁} {C : Precategory o₁ ℓ₁} {o₂ ℓ₂} {D : Precategory o₂ ℓ₂}
-  → is-complete o ℓ D → is-complete o ℓ Cat[ C , D ]
-Functor-cat-is-complete D-complete = functor-limit D-complete
+  → is-complete' o ℓ D → is-complete' o ℓ Cat[ C , D ]
+Functor-cat-is-complete' D-complete = functor-limit D-complete
 ```
 
 <!--
 ```agda
+Functor-cat-is-complete :
+  ∀ {o ℓ} {o₁ ℓ₁} {C : Precategory o₁ ℓ₁} {o₂ ℓ₂} {D : Precategory o₂ ℓ₂}
+  → is-complete o ℓ D → is-complete o ℓ Cat[ C , D ]
+Functor-cat-is-complete D-complete =
+  Make-limit→Limit ⊙ functor-limit (Limit→Make-limit ⊙ D-complete)
+
 module _
   {o₁ ℓ₁} {C : Precategory o₁ ℓ₁}
   {o₂ ℓ₂} {D : Precategory o₂ ℓ₂}
@@ -128,9 +134,10 @@ module _
     F' = op-functor→ F∘ Functor.op F
 
     F'-lim : Limit F'
-    F'-lim = functor-limit
-      (λ f → subst Limit (Functor-path (λ _ → refl) (λ _ → refl))
-        (Colimit→Co-limit (has-D-colims (unopF f))))
+    F'-lim = Make-limit→Limit $ functor-limit
+      (λ f → Limit→Make-limit
+        $ subst Limit (Functor-path (λ _ → refl) (λ _ → refl))
+        $ Colimit→Co-limit (has-D-colims (unopF f)))
       F'
 
     LF'' : Limit (op-functor← F∘ (op-functor→ F∘ Functor.op F))

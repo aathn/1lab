@@ -192,10 +192,10 @@ having colimits of these comma-category-shaped diagrams.
 
 ```agda
   comma-colimits→lan
-    : (∀ (c' : C'.Ob) → Colimit (↓Dia c'))
+    : (∀ (c' : C'.Ob) → Make-colimit (↓Dia c'))
     → Lan F G
   comma-colimits→lan ↓colim = lan module comma-colimits→lan where
-      module ↓colim c' = Colimit (↓colim c')
+      module ↓colim c' = Make-colimit (↓colim c')
 ```
 
 Taking the colimit at each $c' : \cC'$ gives an assignment of objects
@@ -304,8 +304,8 @@ And, if $\cD$ is $\kappa$-cocomplete, then it certainly has the required
 colimits: we can "un-weaken" our result.
 
 ```agda
-  cocomplete→lan : is-cocomplete (o'' ⊔ ℓ) ℓ D → Lan F G
-  cocomplete→lan colimits = comma-colimits→lan (λ c' → colimits (↓Dia c'))
+  cocomplete→lan : is-cocomplete' (o'' ⊔ ℓ) ℓ D → Lan F G
+  cocomplete→lan colimits = comma-colimits→lan λ c' → colimits (↓Dia c')
 ```
 
 
@@ -343,7 +343,7 @@ end up being off by a bunch of natural isomorphisms.
 ```agda
   preserves-colimits→preserves-pointwise-lan
     : ∀ {o'' ℓ''} {E : Precategory o'' ℓ''}
-    → (colimits : is-cocomplete ℓ ℓ D)
+    → (colimits : is-cocomplete' ℓ ℓ D)
     → (H : Functor D E)
     → is-cocontinuous ℓ ℓ H
     → preserves-is-lan H (Lan.has-lan (cocomplete→lan F G colimits))
@@ -355,17 +355,19 @@ end up being off by a bunch of natural isomorphisms.
       open make-natural-iso
       open Func
 
-      ↓colim : (c' : C'.Ob) → Colimit (G F∘ Dom F (!Const c'))
+      ↓colim : (c' : C'.Ob) → Make-colimit (G F∘ Dom F (!Const c'))
       ↓colim c' = colimits (G F∘ Dom F (!Const c'))
 
-      module ↓colim c' = Colimit (↓colim c')
+      module ↓colim c' = Make-colimit (↓colim c')
 
-      H-↓colim : (c' : C'.Ob) → Colimit ((H F∘ G) F∘ Dom F (!Const c'))
+      H-↓colim : (c' : C'.Ob) → Make-colimit ((H F∘ G) F∘ Dom F (!Const c'))
       H-↓colim c' =
+        Colimit→Make-colimit $
         natural-iso→colimit ni-assoc $
-        preserves-colimit.colimit cocont (↓colim c')
+        preserves-colimit.colimit cocont $
+        Make-colimit→Colimit $ ↓colim c'
 
-      module H-↓colim c' = Colimit (H-↓colim c')
+      module H-↓colim c' = Make-colimit (H-↓colim c')
 ```
 
 <details>
@@ -417,7 +419,7 @@ words, the extension we constructed is pointwise.
 
 ```agda
   cocomplete→pointwise-lan
-    : (colim : is-cocomplete ℓ ℓ D)
+    : (colim : is-cocomplete' ℓ ℓ D)
     → is-pointwise-lan (Lan.has-lan (cocomplete→lan F G colim))
   cocomplete→pointwise-lan colim d =
     preserves-colimits→preserves-pointwise-lan
@@ -619,7 +621,7 @@ module _
   -- We don't use 'ff→pointwise-lan-ext' here, as it has a more restrictive
   -- universe bound.
   ff→cocomplete-lan-ext
-    : (cocompl : is-cocomplete ℓ ℓ D)
+    : (cocompl : is-cocomplete' ℓ ℓ D)
     → is-fully-faithful F
     → cocomplete→lan F G cocompl .Ext F∘ F ≅ⁿ G
   ff→cocomplete-lan-ext cocompl ff = (to-natural-iso ni) ni⁻¹ where
