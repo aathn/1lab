@@ -86,12 +86,10 @@ so we elide the details.
 </summary>
 
 ```agda
-  univ-cocone .naturator .is-natural f g =
-    J (λ g p → nat-unidl-to (F.ιᶠ-base-change g) ∘nt (_ ▸ F.₂ p)
-             ≡ (idnt ◂ _) ∘nt nat-unidl-to (F.ιᶠ-base-change f)) $
-    nat-unidl-to (F.ιᶠ-base-change f) ∘nt (_ ▸ F.₂ refl) ≡⟨ Cat.Hom.elimr (Fr.elim (postaction (Cat _ _) _) F.P₁.F-id) ⟩
-    nat-unidl-to (F.ιᶠ-base-change f)                    ≡⟨ Cat.Hom.introl Cat.◀.F-id ⟩
-    (idnt ◂ _) ∘nt nat-unidl-to (F.ιᶠ-base-change f)     ∎
+  univ-cocone .naturator .is-natural f g reflᵢ =
+    nat-unidl-to (F.ιᶠ-base-change f) ∘nt (_ ▸ F.₂ reflᵢ) ≡⟨ Cat.Hom.elimr (Fr.elim (postaction (Cat _ _) _) F.P₁.F-id) ⟩
+    nat-unidl-to (F.ιᶠ-base-change f)                     ≡⟨ Cat.Hom.introl Cat.◀.F-id ⟩
+    (idnt ◂ _) ∘nt nat-unidl-to (F.ιᶠ-base-change f)      ∎
   univ-cocone .ν-compositor f g = ext λ _ → sym $
     let
       p : id' ∘' id' ≡ (id' F₀.∘ F.γ← _ .η _) ∘' id' F₀.∘ F.γ→ _ .η _
@@ -284,12 +282,12 @@ given by $\int F$.
 
 ```agda
     cocone→mediator-equiv : is-equivalence cocone→mediator
-    cocone→mediator-equiv .is-equivalence.F⁻¹        = hom→cocone'
-    cocone→mediator-equiv .is-equivalence.F⊣F⁻¹      = cocone→mediator⊣
-    cocone→mediator-equiv .is-equivalence.unit-iso α =
-      Cr.iso→invertible Laxₒ[ _ , _ ] (isoⁿ→iso cocone→mediator-unit α)
-    cocone→mediator-equiv .is-equivalence.counit-iso G =
-      Cr.iso→invertible Cat[ _ , _ ] (isoⁿ→iso cocone→mediator-counit G)
+    cocone→mediator-equiv .is-equivalence.F⁻¹                = hom→cocone'
+    cocone→mediator-equiv .is-equivalence.F⊣F⁻¹              = cocone→mediator⊣
+    cocone→mediator-equiv .is-equivalence.has-is-equivalence = record where
+      unit-iso α   = Cr.iso→invertible Laxₒ[ _ , _ ] (isoⁿ→iso cocone→mediator-unit α)
+      counit-iso G =
+        Cr.iso→invertible Cat[ _ , _ ] (isoⁿ→iso cocone→mediator-counit G)
 
   ∫-colim : is-lax-colimit {h' = lzero} {o' ⊔ h'} F F.∫ univ-cocone
   ∫-colim X = is-equivalenceᶜ→is-equivalence

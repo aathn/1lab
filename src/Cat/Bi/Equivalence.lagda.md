@@ -149,8 +149,8 @@ module _ {C : Precategory o h} {D : Precategory o h} {F : Functor C D} where
   is-equivalence→is-equivalenceᶜ eqv .is-equivalenceᶜ.F⁻¹   = is-equivalence.inv eqv
   is-equivalence→is-equivalenceᶜ eqv .is-equivalenceᶜ.F⊣F⁻¹ =
     adjoint→adjointᶜ (is-equivalence.inv-adjoint eqv)
-  is-equivalence→is-equivalenceᶜ eqv .is-equivalenceᶜ.unit-iso =
-    is-invertibleⁿ→is-invertible (is-equivalence.unit-iso eqv)
-  is-equivalence→is-equivalenceᶜ eqv .is-equivalenceᶜ.counit-iso =
-    is-invertibleⁿ→is-invertible (is-equivalence.counit-iso eqv)
+  is-equivalence→is-equivalenceᶜ eqv .is-equivalenceᶜ.has-is-equivalence =
+    record where
+      unit-iso   = is-invertibleⁿ→is-invertible (is-equivalence.unit-iso eqv)
+      counit-iso = is-invertibleⁿ→is-invertible (is-equivalence.counit-iso eqv)
 ```

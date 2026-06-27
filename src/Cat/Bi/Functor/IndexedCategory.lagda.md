@@ -69,12 +69,13 @@ also holds, as we will now show.
   open _=>_
 
   private
-    module I = Precategory I
-    module F = Pf-reasoning F
+    module F          = Pf-reasoning F
+    module I          = Precategory I
+    module pg {x} {y} = is-pregroupoid {C = Disc! (I.Hom x y)} Disc-is-groupoid
+
     open module F₀ {x} = Cr (F.₀ x)
 
-    module pg {x} {y} =
-      is-pregroupoid {C = Disc' (el (I.Hom x y) (I.Hom-set x y))} Disc-is-groupoid
+    p→i = Id≃path.from
 
   open F public hiding (left-unit ; right-unit ; hexagon)
 
@@ -95,14 +96,14 @@ far.  To regard $\ca{I}$ as a bicategory, we form the [[locally
 discrete bicategory]] on $\ca{I}$.  This means our pseudofunctor $F$
 acts not only on objects and morphisms in $\ca{I}$, but also on *paths
 between the morphisms* in $\ca{I}$.  It turns out we can characterise
-this action as follows.
+this action as follows using `path→iso`{.Agda}.
 </summary>
 
 ```agda
   abstract
     P₁-path
-      : ∀ {A B} {f g : I.Hom A B} {x} (p : f ≡ g)
-      → ₂ p .η x ≡ path→iso {C = F.₀ A} (ap (λ h → ₁ h .F₀ x) p) .to
+      : ∀ {A B} {f g : I.Hom A B} {x} (p : f ≡ᵢ g)
+      → ₂ p .η x ≡ path→iso {C = F.₀ A} (ap (λ h → ₁ h .F₀ x) (Id≃path.to p)) .to
     P₁-path {A} {x = x} p =
         sym (ap Cr._≅_.to (P₁.ap-F₀-iso Disc-is-category (pg.hom→iso p)) ηₚ x)
       ∙ Regularity.reduce!
@@ -114,39 +115,45 @@ this action as follows.
 ```agda
     P₁-hom-pathp
       : ∀ {A B} {f g : I.Hom A B} {x y} {Ff Fg} (p : f ≡ g)
-      → ₂ p .η y ∘ Ff ≡ Fg
+      → ₂ (p→i p) .η y ∘ Ff ≡ Fg
       → PathP (λ i → Hom x (F₀ (₁ (p i)) y)) Ff Fg
-    P₁-hom-pathp {A} {Ff = Ff} p q = Hom-pathp-reflr (₀ A)
-      $ ap (_∘ Ff) (sym $ P₁-path p) ∙ q
+    P₁-hom-pathp {A} {y = y} {Ff} p q = Hom-pathp-reflr (₀ A) (car p' ∙ q) where
+      p' : path→iso {C = F.₀ A} (ap (λ h → ₁ h .F₀ y) p) .to ≡ ₂ (p→i p) .η y
+      p' = sym
+        $ P₁-path (p→i p)
+        ∙ ap (λ p → path→iso {C = F.₀ A} (ap (λ h → ₁ h .F₀ _) p) .to) (Id≃path.ε p)
 
     left-unit
       : ∀ {A B} (f : I.Hom A B) Fy
-      → ₂ (I.idr f) .η Fy ∘ γ→ (I.id , f) .η Fy ∘ υ→ .η (₁ f .F₀ Fy) ≡ id
+      → ₂ (p→i (I.idr f)) .η Fy ∘ γ→ (I.id , f) .η Fy ∘ υ→ .η (₁ f .F₀ Fy) ≡ id
     left-unit f Fy = F.left-unit f ηₚ Fy
 
     right-unit
       : ∀ {A B} (f : I.Hom A B) Fy
-      → ₂ (I.idl f) .η Fy ∘ γ→ (f , I.id) .η Fy ∘ ₁ f .F₁ (υ→ .η Fy) ≡ id
+      → ₂ (p→i (I.idl f)) .η Fy ∘ γ→ (f , I.id) .η Fy ∘ ₁ f .F₁ (υ→ .η Fy) ≡ id
     right-unit f Fy = F.right-unit f ηₚ Fy
 
     hexagon
       : ∀ {A B C D} (f : I.Hom C D) (g : I.Hom B C) (h : I.Hom A B) Fz
-      → ₂ (I.assoc f g h) .η Fz ∘ γ→ ((g I.∘ h) , f) .η Fz ∘ γ→ (h , g) .η (₁ f .F₀ Fz)
+      → ₂ (p→i (I.assoc f g h)) .η Fz ∘ γ→ ((g I.∘ h) , f) .η Fz ∘ γ→ (h , g) .η (₁ f .F₀ Fz)
       ≡ γ→ (h , (f I.∘ g)) .η Fz ∘ ₁ h .F₁ (γ→ (g , f) .η Fz)
     hexagon f g h Fz = F.hexagon h g f ηₚ Fz ∙ cdr (idr _)
 
     right-unit-υr
       : ∀ {A B} (f : I.Hom A B) Fy
-      → ₂ (I.idl f) .η Fy ∘ γ→ (f , I.id) .η Fy ≡ ₁ f .F₁ (υ← .η Fy)
+      → ₂ (p→i (I.idl f)) .η Fy ∘ γ→ (f , I.id) .η Fy ≡ ₁ f .F₁ (υ← .η Fy)
     right-unit-υr f Fy =
       cdr (intror (F-iso.F-map-iso (₁ f) υ≅' .invl)) ∙ cancell3 (right-unit f Fy)
 
     left-unit-υr-inv
       : ∀ {A B} (f : I.Hom A B) Fy
-      → γ← (I.id , f) .η _ ∘ ₂ (sym (I.idr _)) .η _ ≡ υ→ .η (₁ f .F₀ Fy)
+      → γ← (I.id , f) .η _ ∘ ₂ (p→i (sym (I.idr _))) .η _ ≡ υ→ .η (₁ f .F₀ Fy)
     left-unit-υr-inv f Fy =
          intror (left-unit f Fy)
-      ∙∙ cancel-inner (P₁.F-map-iso (pg.hom→iso (I.idr _)) .invr ηₚ _)
+      ∙∙ cancel-inner (
+           car (ap (λ p → ₂ p .η Fy) prop!)
+         ∙ P₁.F-map-iso (pg.hom→iso (p→i (I.idr f))) .invr ηₚ Fy
+         )
       ∙∙ cancell (γ≅' .invr)
 ```
 -->
@@ -221,24 +228,24 @@ using $F$'s functorial action.
 
 ```agda
   displayed .Displayed.idr' {y = Fy} {f} Ff = P₁-hom-pathp (I.idr f) $
-    ₂ (I.idr f) .η Fy ∘ γ→ _ .η Fy ∘ ₁ I.id .F₁ Ff ∘ υ→ .η _ ≡⟨ refl⟩∘⟨ refl⟩∘⟨ sym (υ→ .is-natural _ _ _) ⟩
-    ₂ (I.idr f) .η Fy ∘ γ→ _ .η Fy ∘ υ→ .η _ ∘ Ff            ≡⟨ cancell3 (left-unit f Fy) ⟩
+    ₂ (p→i (I.idr f)) .η Fy ∘ γ→ _ .η Fy ∘ ₁ I.id .F₁ Ff ∘ υ→ .η _ ≡⟨ refl⟩∘⟨ refl⟩∘⟨ sym (υ→ .is-natural _ _ _) ⟩
+    ₂ (p→i (I.idr f)) .η Fy ∘ γ→ _ .η Fy ∘ υ→ .η _ ∘ Ff            ≡⟨ cancell3 (left-unit f Fy) ⟩
     Ff                                                       ∎
   displayed .Displayed.idl' {y = Fy} {f} Ff = P₁-hom-pathp (I.idl f)
     $ cancell3 (right-unit f Fy)
   displayed .Displayed.assoc' {z = Fz} {f} {g} {h} Ff Fg Fh =
     P₁-hom-pathp (I.assoc f g h) $
-      ₂ (I.assoc f g h) .η Fz ∘ γ→ _ .η Fz
+      ₂ (p→i (I.assoc f g h)) .η Fz ∘ γ→ _ .η Fz
     ∘ ₁ (g I.∘ h) .F₁ Ff ∘ γ→ _ .η _ ∘ ₁ h .F₁ Fg ∘ Fh
       ≡⟨ refl⟩∘⟨ refl⟩∘⟨ extendl (sym $ γ→ _ .is-natural _ _ _) ⟩
-      ₂ (I.assoc f g h) .η Fz ∘ γ→ _ .η Fz
+      ₂ (p→i (I.assoc f g h)) .η Fz ∘ γ→ _ .η Fz
     ∘ γ→ _ .η (₁ f .F₀ Fz) ∘ ₁ h .F₁ (₁ g .F₁ Ff) ∘ ₁ h .F₁ Fg ∘ Fh
       ≡⟨ pulll3 (hexagon f g h Fz) ∙ sym (assoc _ _ _) ⟩
     γ→ _ .η Fz ∘ ₁ h .F₁ (γ→ _ .η Fz) ∘ ₁ h .F₁ (₁ g .F₁ Ff) ∘ ₁ h .F₁ Fg ∘ Fh
       ≡⟨ refl⟩∘⟨ Fr.pulll3 (₁ h) refl ⟩
     γ→ _ .η Fz ∘ ₁ h .F₁ (γ→ _ .η Fz ∘ ₁ g .F₁ Ff ∘ Fg) ∘ Fh
       ∎
-  displayed .Displayed.hom[_] p Ff = ₂ p .η _ ∘ Ff
+  displayed .Displayed.hom[_] p Ff = ₂ (p→i p) .η _ ∘ Ff
   displayed .Displayed.coh[_] p Ff = P₁-hom-pathp p refl
 ```
 
@@ -326,7 +333,7 @@ functors both ways we do need to utilise $F$'s pseudofunctoriality.
   fibre-equiv-from .F₁ Ff              = υ← .η _ ∘ Ff
   fibre-equiv-from .F-id               = isoⁿ→iso υ≅ _ .invr
   fibre-equiv-from .F-∘ {z = Fz} Ff Fg =
-    υ← .η Fz ∘ ₂ (I.idl I.id) .η Fz ∘ Ff ∘' Fg           ≡⟨ refl⟩∘⟨ pulll (right-unit-υr I.id _) ⟩
+    υ← .η Fz ∘ ₂ (p→i (I.idl I.id)) .η Fz ∘ Ff ∘' Fg     ≡⟨ refl⟩∘⟨ pulll (right-unit-υr I.id _) ⟩
     υ← .η Fz ∘ ₁ I.id .F₁ (υ← .η _) ∘ ₁ I.id .F₁ Ff ∘ Fg ≡⟨ cdr (Fr.pulll (₁ I.id) refl) ∙ extendl (υ← .is-natural _ _ _) ⟩
     (υ← .η Fz ∘ Ff) ∘ υ← .η _ ∘ Fg                       ∎
 ```
@@ -350,12 +357,13 @@ details.
   fibre-equiv⊣ ._⊣_.zag = eliml (υ≅' .invr)
 
   fibre-equiv : ∀ {x} → Equivalence (₀ x) (Fibre displayed x)
-  fibre-equiv .Equivalence.To                                    = fibre-equiv-to
-  fibre-equiv .Equivalence.To-equiv .is-equivalence.F⁻¹          = fibre-equiv-from
-  fibre-equiv .Equivalence.To-equiv .is-equivalence.F⊣F⁻¹        = fibre-equiv⊣
-  fibre-equiv .Equivalence.To-equiv .is-equivalence.unit-iso _   = id-invertible
-  fibre-equiv .Equivalence.To-equiv .is-equivalence.counit-iso _ =
-    Cr.id-invertible (Fibre displayed _)
+  fibre-equiv .Equivalence.To                             = fibre-equiv-to
+  fibre-equiv .Equivalence.To-equiv .is-equivalence.F⁻¹   = fibre-equiv-from
+  fibre-equiv .Equivalence.To-equiv .is-equivalence.F⊣F⁻¹ = fibre-equiv⊣
+  fibre-equiv .Equivalence.To-equiv .is-equivalence.has-is-equivalence =
+    record where
+      unit-iso   _ = id-invertible
+      counit-iso _ = Cr.id-invertible (Fibre displayed _)
 ```
 
 </details>
@@ -402,8 +410,8 @@ enlightening.
       where
         p : (base-change f F∘ fibre-equiv-to) .F₁ g ≡ (fibre-equiv-to F∘ F.₁ f) .F₁ g
         p =
-          γ← (I.id , f) .η y ∘ hom[ sym (Cr.id-comm I) ] (γ→ (f , I.id) .η y ∘ _) ≡⟨ refl⟩∘⟨ reindex _ _ ∙ pushl (P₁.F-∘ _ _ ηₚ y) ⟩
-          γ← (I.id , f) .η y ∘ ₂ (sym (I.idr _)) .η _ ∘ hom[ I.idl _ ] _          ≡⟨ pulll (left-unit-υr-inv f y) ⟩
+          γ← (I.id , f) .η y ∘ hom[ sym (Cr.id-comm I) ] (γ→ (f , I.id) .η y ∘ _) ≡⟨ refl⟩∘⟨ pushl (ap (λ p → ₂ p .η y) prop! ∙ P₁.F-∘ _ _ ηₚ y) ⟩
+          γ← (I.id , f) .η y ∘ ₂ (p→i (sym (I.idr _))) .η _ ∘ hom[ I.idl _ ] _    ≡⟨ pulll (left-unit-υr-inv f y) ⟩
           υ→ .η _ ∘ hom[ I.idl _ ] (γ→ (f , I.id) .η _ ∘ ₁ f .F₁ (id' ∘ g) ∘ id)  ≡⟨ refl⟩∘⟨ refl⟩∘⟨ refl⟩∘⟨ idr _ ∙ ₁ f .F-∘ _ _ ⟩
           _ ∘ hom[ I.idl _ ] (id' ∘' ₁ f .F₁ g)                                   ≡⟨ refl⟩∘⟨ from-pathp[] (idl' _) ⟩
           υ→ .η _ ∘ ₁ f .F₁ g                                                     ∎
