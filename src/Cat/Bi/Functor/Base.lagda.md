@@ -21,10 +21,9 @@ module Cat.Bi.Functor.Base where
 
 Having defined [[lax functors]] and [[pseudofunctors]] between
 [[bicategories]], we should expect to be able to compose them, in
-analogy with ordinary [[functors]] between [[categories]].
-
-This is indeed the case, and while the construction is unsurprising,
-showing the required coherence identities is a bit of an exercise.
+analogy with ordinary [[functors]] between [[categories]].  This is
+indeed the case, and while the construction is unsurprising, showing the
+required coherence identities is a bit of an exercise.
 
 <!--
 ```agda
@@ -300,10 +299,9 @@ heart.
 </details>
 
 Finally, pseudofunctors can be composed using the same construction,
-thanks to the fact that functors [preserve invertible morphisms] and
-invertible morphisms compose.
+thanks to the fact that functors [preserve isomorphisms].
 
-[preserve invertible morphisms]: Cat.Functor.Base.html#action-on-isomorphisms
+[preserve isomorphisms]: Cat.Functor.Base.html#action-on-isomorphisms
 
 ```agda
   _P∘_ : Pseudofunctor C D → Pseudofunctor B C → Pseudofunctor B D

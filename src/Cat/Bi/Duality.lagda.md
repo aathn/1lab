@@ -224,8 +224,9 @@ module _ {B : Prebicategory o h ℓ} {C : Prebicategory o' h' ℓ'} where
 -->
 
 As with functors, lax functors have duals going between the opposite
-categories.  All we need to do is apply the compositor in with the
-opposite order of arguments and reorder the hexagon diagram accordingly.
+categories.  The compositor of the opposite functor is given by flipping
+the original compositor, and the hexagon diagram can be reordered
+accordingly.
 
 ```agda
     opˡ : Lax-functor (B ^op) (C ^op)
@@ -242,10 +243,11 @@ opposite order of arguments and reorder the hexagon diagram accordingly.
     opˡ .left-unit  = F.right-unit
 ```
 
-On the other hand, there is no good notion of "conjugate dual" from
+On the other hand, there is no good notion of a "conjugate dual" from
 $\bicat{B}\co$ to $\bicat{C}\co$ for a lax functor: we would need to
 invert the directions of the compositor and unitor, but for a lax
-functor, this is not possible.
+functor, this is not possible.  On the other hand, for pseudofunctors we
+get both flavors of duals.
 
 <!--
 ```agda
@@ -254,10 +256,6 @@ functor, this is not possible.
 ```
 -->
 
-For pseudofunctors, the situation is a bit different.  As with lax
-functors, we get a dual between the opposite bicategories, by the same
-construction as above.
-
 ```agda
     opᵖ : Pseudofunctor (B ^op) (C ^op)
     opᵖ .lax                    = opˡ (F .lax)
@@ -265,9 +263,9 @@ construction as above.
     opᵖ .compositor-inv (f , g) = F.compositor-inv (g , f)
 ```
 
-A pseudofunctor $F$ also has a conjugate dual, whose action on objects
-is the same, but whose action on $\hom$-categories is given by the
-opposite of $F$'s morphism mapping.
+The conjugate dual of a pseudofunctor $F$ acts the same as $F$ on
+objects, but its action on $\hom$-categories is given by the opposite of
+$F$'s action.
 
 ```agda
     co : Pseudofunctor (B ^co) (C ^co)

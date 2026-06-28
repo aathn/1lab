@@ -23,7 +23,7 @@ module Cat.Bi.Instances.Functor where
 
 We have seen that [[lax (and pseudonatural) transformations|lax
 transformation]] give a meaningful notion of morphism between [[lax
-functors]], and that [[modifications]] give a notion of morphisms
+functors]], and that [[modifications]] give a notion of morphism
 between lax transformations.  We've also done the work to show that [lax
 transformations compose], and [similarly for modifications].
 
@@ -159,7 +159,7 @@ We elide the routine verification that this construction is functorial.
 
 The left unitor in our bicategory should be a natural family of
 invertible modifications $\id \To \alpha \id$.  Since $\alpha \id$ is
-given componentwise by $\alpha_a \id$ at each $a \in \bicat{C}$, we can
+given componentwise by $\alpha_a \id$ at each $a : \bicat{C}$, we can
 build a modification by taking the unitor $\lambda_{\alpha_a}$ of
 $\bicat{C}$ at each component.
 
@@ -234,14 +234,14 @@ $\bicat{C}$.
 ```
 
 Applying duality yields a bicategory of lax functors with oplax
-transformations...
+transformations.
 
 ```agda
 Laxₒ : Prebicategory o h ℓ → Prebicategory o' h' ℓ' → Prebicategory _ _ _
 Laxₒ B C = Laxₗ (B ^op) (C ^op) ^op
 ```
 
-And the same constructions work to give us bicategories of
+Finally, the same constructions work to give us bicategories of
 pseudofunctors with lax and oplax transformations, respectively.
 
 ```agda
