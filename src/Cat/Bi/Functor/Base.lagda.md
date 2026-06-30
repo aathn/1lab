@@ -50,8 +50,7 @@ module Lf-reasoning
     → postaction C (₁ f) F∘ P₁ {X} {Y} => P₁ F∘ postaction B f
   ▶-comp .η x              = γ→ (_ , x)
   ▶-comp .is-natural x y α =
-       CH.cdr (Fr.introl (preaction C (₁ y)) P₁.F-id)
-    ∙∙ γ→nat _ _
+       CH.cdr (Fr.introl (preaction C (₁ y)) P₁.F-id) ∙∙ γ→nat _ _
     ∙∙ CH.car (P₁.F-∘ _ _ ∙ CH.eliml (Fr.elim P₁ B.compose.◀.F-id))
 
   ◀-comp
@@ -59,8 +58,7 @@ module Lf-reasoning
     → preaction C (₁ f) F∘ P₁ {Y} {Z} => P₁ F∘ preaction B f
   ◀-comp .η x              = γ→ (x , _)
   ◀-comp .is-natural x y α =
-       CH.cdr (Fr.intror (postaction C (₁ x)) P₁.F-id)
-    ∙∙ γ→nat _ _
+       CH.cdr (Fr.intror (postaction C (₁ x)) P₁.F-id) ∙∙ γ→nat _ _
     ∙∙ CH.car (P₁.F-∘ _ _ ∙ CH.elimr (Fr.elim P₁ B.compose.▶.F-id))
 
 module Pf-reasoning
@@ -76,8 +74,9 @@ module Pf-reasoning
 
   open Pseudofunctor F hiding (module P₁) public
 
-  open Cr._≅_
+  open make-natural-iso
   open Cr.Inverses
+  open Cr._≅_
 
   υ≅ : ∀ {A} → C.id CH.≅ ₁ (B.id {A})
   υ≅ .to       = υ→
@@ -89,12 +88,10 @@ module Pf-reasoning
     → Uncurry C.compose F∘ (P₁ {B} {C} F× P₁ {A} {B}) ≅ⁿ P₁ F∘ Uncurry B.compose
   compositor-ni = to-natural-iso ni where
     ni : make-natural-iso _ _
-    ni .make-natural-iso.eta       = γ→
-    ni .make-natural-iso.inv       = γ←
-    ni .make-natural-iso.eta∘inv _ =
-      Cr.is-invertible.inverses (compositor-inv _) .invl
-    ni .make-natural-iso.inv∘eta _ =
-      Cr.is-invertible.inverses (compositor-inv _) .invr
+    ni .eta       = γ→
+    ni .inv       = γ←
+    ni .eta∘inv _ = Cr.is-invertible.inverses (compositor-inv _) .invl
+    ni .inv∘eta _ = Cr.is-invertible.inverses (compositor-inv _) .invr
     ni .make-natural-iso.natural _ _ _ = sym $ γ→nat _ _
 
   γ≅ : ∀ {A B C} {f : B B.↦ C} {g : A B.↦ B} → ₁ f C.⊗ ₁ g CH.≅ ₁ (f B.⊗ g)
@@ -105,15 +102,12 @@ module Pf-reasoning
     → postaction C (₁ f) F∘ P₁ {X} {Y} ≅ⁿ P₁ F∘ postaction B f
   ▶-comp = to-natural-iso ni where
     ni : make-natural-iso _ _
-    ni .make-natural-iso.eta x     = γ→ (_ , x)
-    ni .make-natural-iso.inv x     = γ← (_ , x)
-    ni .make-natural-iso.eta∘inv _ =
-      Cr.is-invertible.inverses (compositor-inv _) .invl
-    ni .make-natural-iso.inv∘eta _ =
-      Cr.is-invertible.inverses (compositor-inv _) .invr
-    ni .make-natural-iso.natural x y α = sym
-       $ CH.cdr (Fr.introl (preaction C (₁ y)) P₁.F-id)
-      ∙∙ γ→nat _ _
+    ni .eta x     = γ→ (_ , x)
+    ni .inv x     = γ← (_ , x)
+    ni .eta∘inv _ = Cr.is-invertible.inverses (compositor-inv _) .invl
+    ni .inv∘eta _ = Cr.is-invertible.inverses (compositor-inv _) .invr
+    ni .natural x y α = sym
+       $ CH.cdr (Fr.introl (preaction C (₁ y)) P₁.F-id) ∙∙ γ→nat _ _
       ∙∙ CH.car (P₁.F-∘ _ _ ∙ CH.eliml (Fr.elim P₁ B.compose.◀.F-id))
 
   ◀-comp
@@ -121,15 +115,12 @@ module Pf-reasoning
     → preaction C (₁ f) F∘ P₁ {Y} {Z} ≅ⁿ P₁ F∘ preaction B f
   ◀-comp = to-natural-iso ni where
     ni : make-natural-iso _ _
-    ni .make-natural-iso.eta x     = γ→ (x , _)
-    ni .make-natural-iso.inv x     = γ← (x , _)
-    ni .make-natural-iso.eta∘inv _ =
-      Cr.is-invertible.inverses (compositor-inv _) .invl
-    ni .make-natural-iso.inv∘eta _ =
-      Cr.is-invertible.inverses (compositor-inv _) .invr
-    ni .make-natural-iso.natural x y α = sym
-       $ CH.cdr (Fr.intror (postaction C (₁ x)) P₁.F-id)
-      ∙∙ γ→nat _ _
+    ni .eta x     = γ→ (x , _)
+    ni .inv x     = γ← (x , _)
+    ni .eta∘inv _ = Cr.is-invertible.inverses (compositor-inv _) .invl
+    ni .inv∘eta _ = Cr.is-invertible.inverses (compositor-inv _) .invr
+    ni .natural x y α = sym
+       $ CH.cdr (Fr.intror (postaction C (₁ x)) P₁.F-id) ∙∙ γ→nat _ _
       ∙∙ CH.car (P₁.F-∘ _ _ ∙ CH.elimr (Fr.elim P₁ B.compose.▶.F-id))
 
 open Pseudofunctor

@@ -180,16 +180,17 @@ mostly boil down to automated bicategory reasoning.
         F∘ Flip (Lax.compose _ _) F∘ Const-pseudoₒ.Const₁
         ≅ⁿ postaction (Cat _ _) (hom→cocone₀ X) F∘ compose
       hom→cocone-nat = to-natural-iso ni where
+        open make-natural-iso
         ni : make-natural-iso _ _
-        ni .make-natural-iso.eta f .η g .Γ a         = α← _
-        ni .make-natural-iso.eta f .η g .is-natural  = bicat! C
-        ni .make-natural-iso.eta f .is-natural g h α = ext λ _ → bicat! C
-        ni .make-natural-iso.inv f .η g .Γ a         = α→ _
-        ni .make-natural-iso.inv f .η g .is-natural  = bicat! C
-        ni .make-natural-iso.inv f .is-natural g h α = ext λ _ → bicat! C
-        ni .make-natural-iso.eta∘inv f               = ext λ _ _ → Br.α≅ C .invr
-        ni .make-natural-iso.inv∘eta f               = ext λ _ _ → Br.α≅ C .invl
-        ni .make-natural-iso.natural g h α           = ext λ _ _ → bicat! C
+        ni .eta f .η g .Γ a         = α← _
+        ni .eta f .η g .is-natural  = bicat! C
+        ni .eta f .is-natural g h α = ext λ _ → bicat! C
+        ni .inv f .η g .Γ a         = α→ _
+        ni .inv f .η g .is-natural  = bicat! C
+        ni .inv f .is-natural g h α = ext λ _ → bicat! C
+        ni .eta∘inv f               = ext λ _ _ → Br.α≅ C .invr
+        ni .inv∘eta f               = ext λ _ _ → Br.α≅ C .invl
+        ni .natural g h α           = ext λ _ _ → bicat! C
 
     hom→cocone : Hom-from-bi C L .lax =>ₚ lax-cocones-at .lax
     hom→cocone .lax .σ                = hom→cocone₀

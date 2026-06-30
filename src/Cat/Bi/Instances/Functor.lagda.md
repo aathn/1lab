@@ -55,8 +55,8 @@ open Cr._≅_
 open _=>_
 
 private
-  module Pc = Precategory
   module Pb = Prebicategory
+  module Pc = Precategory
   variable
     o o' h h' ℓ ℓ' : Level
     B C : Prebicategory o h ℓ
@@ -119,6 +119,7 @@ Laxₗ B C = pb module Lax where
   private
     module C  = Br C
     module CH = C.Hom
+  open make-natural-iso
   open Make-bifunctor
   open Modification
   open _=>ₗ_
@@ -167,13 +168,13 @@ $\bicat{C}$ at each component.
   unitor-l : ∀ {F G} → Id ≅ⁿ Bifunctor.Right (compose {F = F} {G}) idlx
   unitor-l = to-natural-iso ni where
     ni : make-natural-iso _ _
-    ni .make-natural-iso.eta α .Γ a        = C.λ→ (σ α a)
-    ni .make-natural-iso.eta α .is-natural = bicat! C
-    ni .make-natural-iso.inv α .Γ a        = C.λ← (σ α a)
-    ni .make-natural-iso.inv α .is-natural = bicat! C
-    ni .make-natural-iso.eta∘inv α         = ext λ _ → C.λ≅ .invl
-    ni .make-natural-iso.inv∘eta α         = ext λ _ → C.λ≅ .invr
-    ni .make-natural-iso.natural _ _ _     = ext λ _ →
+    ni .eta α .Γ a        = C.λ→ (σ α a)
+    ni .eta α .is-natural = bicat! C
+    ni .inv α .Γ a        = C.λ← (σ α a)
+    ni .inv α .is-natural = bicat! C
+    ni .eta∘inv α         = ext λ _ → C.λ≅ .invl
+    ni .inv∘eta α         = ext λ _ → C.λ≅ .invr
+    ni .natural _ _ _     = ext λ _ →
       CH.car (sym (C.⊗.rmap-◆ _)) ∙ sym (C.λ→nat _)
 ```
 
@@ -187,25 +188,25 @@ this `<details>`{.html}-block.
   unitor-r : ∀ {F G} → Id ≅ⁿ Bifunctor.Left (compose {G = F} {G}) idlx
   unitor-r = to-natural-iso ni where
     ni : make-natural-iso _ _
-    ni .make-natural-iso.eta α .Γ a        = C.ρ→ (σ α a)
-    ni .make-natural-iso.eta α .is-natural = bicat! C
-    ni .make-natural-iso.inv α .Γ a        = C.ρ← (σ α a)
-    ni .make-natural-iso.inv α .is-natural = bicat! C
-    ni .make-natural-iso.eta∘inv α         = ext λ _ → C.ρ≅ .invl
-    ni .make-natural-iso.inv∘eta α         = ext λ _ → C.ρ≅ .invr
-    ni .make-natural-iso.natural _ _ _     = ext λ _ →
+    ni .eta α .Γ a        = C.ρ→ (σ α a)
+    ni .eta α .is-natural = bicat! C
+    ni .inv α .Γ a        = C.ρ← (σ α a)
+    ni .inv α .is-natural = bicat! C
+    ni .eta∘inv α         = ext λ _ → C.ρ≅ .invl
+    ni .inv∘eta α         = ext λ _ → C.ρ≅ .invr
+    ni .natural _ _ _     = ext λ _ →
       CH.car (sym (C.⊗.lmap-◆ _)) ∙ sym (C.ρ→nat _)
 
   associator : Associator-for Laxₗ[_,_] compose
   associator = to-natural-iso ni where
     ni : make-natural-iso _ _
-    ni .make-natural-iso.eta α .Γ a        = C.α→ _
-    ni .make-natural-iso.eta α .is-natural = bicat! C
-    ni .make-natural-iso.inv α .Γ a        = C.α← _
-    ni .make-natural-iso.inv α .is-natural = bicat! C
-    ni .make-natural-iso.eta∘inv α         = ext λ _ → C.α≅ .invl
-    ni .make-natural-iso.inv∘eta α         = ext λ _ → C.α≅ .invr
-    ni .make-natural-iso.natural _ _ _     = ext λ _ → bicat! C
+    ni .eta α .Γ a        = C.α→ _
+    ni .eta α .is-natural = bicat! C
+    ni .inv α .Γ a        = C.α← _
+    ni .inv α .is-natural = bicat! C
+    ni .eta∘inv α         = ext λ _ → C.α≅ .invl
+    ni .inv∘eta α         = ext λ _ → C.α≅ .invr
+    ni .natural _ _ _     = ext λ _ → bicat! C
 ```
 
 </details>
