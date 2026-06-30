@@ -61,7 +61,7 @@ conditions should hold up to isomorphism or merely a directed
 transformation. For example, in a 1-category, given two parallel
 morphisms
 
-~~~{.quiver}
+~~~{.quiver .attach-around}
 \[\begin{tikzcd}
 	A & B
 	\arrow["f", shift left, from=1-1, to=1-2]
@@ -113,10 +113,10 @@ pseudofunctor $F$, illustrated in the diagram below.
 \end{tikzcd}\]
 ~~~
 
-For each object $i$ in the diagram, $\phi_i : F(i) \to X$ gives a leg of
-the cocone, and for any morphism $f : i \to j$, we have a 2-cell
-isomorphism $\nu_f : \phi_i \cong \phi_j F(f)$ in place of the usual
-commutativity requirement for cocones.
+For each object $i$ in the diagram, the map $\phi_i : F(i) \to X$ gives
+a leg of the cocone, and for any morphism $f : i \to j$, we have an
+invertible 2-cell $\nu_f : \phi_i \cong \phi_j F(f)$ in place of the
+usual commutativity requirement for cocones.
 
 As is often the case in bicategorical definitions, we have the choice of
 whether to consider cocones $F \to \Delta_X$ which commute strongly (so
@@ -198,7 +198,6 @@ mostly boil down to automated bicategory reasoning.
     hom→cocone .lax .ν-unitor         = ext λ _ _ → bicat! C
     hom→cocone .naturator-inv f       =
       Cr.iso→invertible Cat[ _ , _ ] (isoⁿ→iso hom→cocone-nat f)
-
 ```
 
 </details>
