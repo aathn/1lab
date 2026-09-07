@@ -578,7 +578,7 @@ macro
 
 private module _ {o ℓ ℓ'} {C : Prebicategory o ℓ ℓ'} where
   open Prebicategory C
-  variable
+  private variable
     X Y : Ob
     f g h i : X ↦ Y
     α β γ δ : f ⇒ g
@@ -614,3 +614,45 @@ private module _ {o ℓ ℓ'} {C : Prebicategory o ℓ ℓ'} where
 
   test-exchange2 : (α ◆ β) ≡ (g ▶ β) ∘ (α ◀ f)
   test-exchange2 = bicat! C
+
+
+module Coherence {o ℓ ℓ'} (C : Prebicategory o ℓ ℓ') where
+  open Br C
+  private variable
+    W X Y Z : Ob
+
+  data Expr₂ : X ↦ Y → X ↦ Y → SSet (o ⊔ ℓ ⊔ ℓ') where
+    `id  : {f : X ↦ Y} → Expr₂ f f
+    _`∘_ : {f g h : X ↦ Y} → Expr₂ g h → Expr₂ f g → Expr₂ f h
+    _`▶_
+      : (f : Y ↦ Z) {g₁ g₂ : X ↦ Y} → Expr₂ g₁ g₂ → Expr₂ (f ⊗ g₁) (f ⊗ g₂)
+    _`◀_
+      : {f₁ f₂ : Y ↦ Z} → Expr₂ f₁ f₂ → (g : X ↦ Y) → Expr₂ (f₁ ⊗ g) (f₂ ⊗ g)
+    `λ← : (f : X ↦ Y) → Expr₂ (id ⊗ f) f
+    `λ→ : (f : X ↦ Y) → Expr₂ f (id ⊗ f)
+    `ρ← : (f : X ↦ Y) → Expr₂ (f ⊗ id) f
+    `ρ→ : (f : X ↦ Y) → Expr₂ f (f ⊗ id)
+    `α←
+      : (f : Z ↦ W) (g : Y ↦ Z) (h : X ↦ Y)
+      → Expr₂ (f ⊗ (g ⊗ h)) ((f ⊗ g) ⊗ h)
+    `α→
+      : (f : Z ↦ W) (g : Y ↦ Z) (h : X ↦ Y)
+      → Expr₂ ((f ⊗ g) ⊗ h) (f ⊗ (g ⊗ h))
+
+  ⟦_⟧₂ : {f g : X ↦ Y} → Expr₂ f g → f ⇒ g
+  ⟦ `id ⟧₂       = Hom.id
+  ⟦ α `∘ β ⟧₂    = ⟦ α ⟧₂ ∘ ⟦ β ⟧₂
+  ⟦ α `◀ β ⟧₂    = ⟦ α ⟧₂ ◀ _
+  ⟦ α `▶ β ⟧₂    = _ ▶ ⟦ β ⟧₂
+  ⟦ `λ← f ⟧₂     = λ← _
+  ⟦ `λ→ f ⟧₂     = λ→ _
+  ⟦ `ρ← f ⟧₂     = ρ← _
+  ⟦ `ρ→ f ⟧₂     = ρ→ _
+  ⟦ `α← f g h ⟧₂ = α← _
+  ⟦ `α→ f g h ⟧₂ = α→ _
+
+  bicat-norm : {f g : X ↦ Y} (α : Expr₂ f g) → NbE.⟦_⟧₂ C α ≡ id
+  bicat-norm = ?
+
+  bicat-coherence : {f g : X ↦ Y} (α β : Expr₂ f g) → ⟦ α ⟧₂ ≡ ⟦ β ⟧₂
+  bicat-coherence = {!!}
