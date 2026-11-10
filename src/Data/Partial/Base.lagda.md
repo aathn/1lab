@@ -163,7 +163,7 @@ never .def = ⊥Ω
 
 We claimed above that the type of partial elements is a _monad_:
 equipped with the information order, it's actually the [[free pointed
-directed-continuous partial order|free pointed DCPO]] on a [[set]].
+directed-complete partial order|free pointed DCPO]] on a [[set]].
 However, it's also a monad in the looser sense of _supporting
 `do`{.Agda} notation_.
 
